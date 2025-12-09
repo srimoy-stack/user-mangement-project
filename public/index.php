@@ -54,6 +54,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
     // User management
     $r->addRoute('GET', '/admin/users', [AdminController::class, 'listUsers']);
     $r->addRoute('POST', '/admin/users', [AdminController::class, 'createUser']);
+    $r->addRoute('GET', '/admin/users/{id:\d+}', [AdminController::class, 'showUser']);
+
     $r->addRoute('PUT', '/admin/users/{id:\d+}', [AdminController::class, 'updateUser']);
     $r->addRoute('DELETE', '/admin/users/{id:\d+}', [AdminController::class, 'deleteUser']);
 

@@ -5,15 +5,19 @@ namespace App\Controllers\Web;
 
 use App\Core\Database;
 use App\Repositories\UserRepository;
+use PDO;
 
 class AdminController
 {
+    private PDO $db;
     private UserRepository $users;
 
-    public function __construct(Database $db)
-    {
-        $this->users = new UserRepository($db);
-    }
+   public function __construct(Database $db)
+{
+    $this->db = $db->pdo();   // Correct
+    $this->users = new UserRepository($db);
+}
+
 
     // ---------------------------------------------------------
     // LOGIN (SESSION BASED)
@@ -30,32 +34,27 @@ class AdminController
     {
         header("Content-Type: application/json");
 
-        $input = json_decode(file_get_contents('php://input'), true);
+        // Accept both JSON and form-data
+        $input = json_decode(file_get_contents("php://input"), true);
+        $email = $input['email'] ?? $_POST['email'] ?? null;
+        $password = $input['password'] ?? $_POST['password'] ?? null;
 
-        if (!$input || !isset($input['email'], $input['password'])) {
+        if (!$email || !$password) {
             http_response_code(400);
             echo json_encode(['error' => 'Email and password are required']);
             return;
         }
 
-        $email = trim($input['email']);
-        $password = $input['password'];
-
-        // Fetch admin (we expect admin in "admins" table)
-        // You will create AdminRepository later, but for now simple inline query:
-        $db = $this->users->getDb()->pdo();
-        $stmt = $db->prepare("SELECT id, name, email, password FROM admins WHERE email = :email");
-        $stmt->execute([':email' => $email]);
-        $admin = $stmt->fetch();
+        // Fetch admin
+        $stmt = $this->db->prepare("SELECT * FROM admins WHERE email = ?");
+        $stmt->execute([$email]);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$admin || !password_verify($password, $admin['password'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Invalid credentials']);
             return;
         }
-
-        // Secure session regeneration
-        session_regenerate_id(true);
 
         $_SESSION['admin_id'] = $admin['id'];
 
@@ -84,7 +83,7 @@ class AdminController
     }
 
     // ---------------------------------------------------------
-    // LIST USERS WITH SEARCH, SORT, PAGINATION
+    // LIST USERS (Search + Sort + Pagination)
     // ---------------------------------------------------------
     public function listUsers(): void
     {
@@ -146,7 +145,7 @@ class AdminController
     }
 
     // ---------------------------------------------------------
-    // SHOW SINGLE USER
+    // SHOW USER
     // ---------------------------------------------------------
     public function showUser(array $vars): void
     {
