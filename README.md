@@ -1,5 +1,4 @@
-
-# PHP Backend Assignment — Admin Panel + Product Catalog REST API
+PHP Backend Assignment — Admin Panel + Product Catalog REST API
 
 This project implements the backend system defined in the assignment, including:
 
@@ -53,46 +52,18 @@ http://localhost:8080
 4. Folder Structure
 ------------------------------------------------------------
 php-assignmnet/
-│
 ├── public/
 │   └── index.php
-│
 ├── src/
 │   ├── Core/
-│   │   ├── Database.php
-│   │   ├── Response.php
-│   │   ├── Validator.php
-│   │   └── Auth.php
-│   │
 │   ├── Controllers/
-│   │   ├── Web/
-│   │   │   └── AdminController.php
-│   │   └── Api/
-│   │       └── ProductController.php
-│   │
 │   ├── Middleware/
-│   │   └── JwtMiddleware.php
-│   │
 │   ├── Models/
-│   │   ├── User.php
-│   │   └── Product.php
-│   │
 │   └── Repositories/
-│       ├── UserRepository.php
-│       └── ProductRepository.php
-│
 ├── migrations/
-│   └── 001_create_tables.sql
-│
 ├── postman/
-│   └── php-assignment.postman_collection.json
-│
 ├── sql/
-│   └── explain_queries.sql
-│
 ├── tools/
-│   └── db_test.php
-│
 └── README.md
 
 ------------------------------------------------------------
@@ -109,7 +80,7 @@ Insert admin:
 INSERT INTO admins (name, email, password)
 VALUES ('Super Admin', 'admin@example.com', '<HASH>');
 
-Login:
+Login Credentials:
 email: admin@example.com
 password: Admin@123
 
@@ -137,89 +108,64 @@ Response:
 ------------------------------------------------------------
 7. User Management (Admin Protected)
 ------------------------------------------------------------
-
-List Users:
+List:
 GET /admin/users?page=1&limit=10&q=john&sort=name&dir=asc
 
-Create User:
+Create:
 POST /admin/users
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "phone": "9876543210",
-  "city": "Delhi"
-}
 
-Update User:
+Show:
+GET /admin/users/{id}
+
+Update:
 PUT /admin/users/{id}
 
-Delete User:
+Delete:
 DELETE /admin/users/{id}
-
-User Fields:
-id, name, email, phone, city, created_at
 
 ------------------------------------------------------------
 8. Product API (JWT Protected)
 ------------------------------------------------------------
-
-Login for JWT:
-POST /api/v1/auth/login
-{
-  "email": "admin@example.com",
-  "password": "Admin@123"
-}
-
-Response:
-{
-  "token": "<JWT-TOKEN>",
-  "expires_in": 3600
-}
+Login:
+POST /api/auth/login
 
 Use token:
 Authorization: Bearer <JWT>
 
-List Products:
-GET /api/v1/products?q=iphone&category=electronics&sort=price&dir=asc&page=1&limit=10
+List:
+GET /api/products
 
-Create Product:
-POST /api/v1/products
-{
-  "title": "iPhone 15",
-  "description": "Latest model",
-  "price": 79999,
-  "category": "electronics"
-}
+Create:
+POST /api/products
 
-Update Product:
-PUT /api/v1/products/{id}
+Show:
+GET /api/products/{id}
 
-Delete Product:
-DELETE /api/v1/products/{id}
+Update:
+PUT /api/products/{id}
 
-Product Fields:
-id, title, description, price, category, created_at
+Delete:
+DELETE /api/products/{id}
 
 ------------------------------------------------------------
-9. Database Indexes (Required)
+9. Database Indexes
 ------------------------------------------------------------
-users.email → UNIQUE
-products.title → INDEX
-products.category → INDEX
-admins.email → UNIQUE
+users.email → UNIQUE  
+products.title → INDEX  
+products.category → INDEX  
+admins.email → UNIQUE  
 
 ------------------------------------------------------------
-10. EXPLAIN Queries (Required by Assignment)
+10. EXPLAIN Queries
 ------------------------------------------------------------
-
-User Listing Query:
+User Listing:
 EXPLAIN SELECT id, name, email, phone, city, created_at
 FROM users
 WHERE (name LIKE '%john%' OR email LIKE '%john%')
 ORDER BY created_at DESC
 LIMIT 10 OFFSET 0;
 
-Product Listing Query:
+Product Listing:
 EXPLAIN SELECT id, title, description, price, category, created_at
 FROM products
 WHERE (title LIKE '%iphone%' OR description LIKE '%iphone%')
@@ -235,25 +181,24 @@ WHERE id = 10;
 ------------------------------------------------------------
 11. Postman Collection
 ------------------------------------------------------------
-Included in:
-postman/php-assignment.postman_collection.json
+Included in postman/php-assignment.postman_collection.json
 
 ------------------------------------------------------------
 12. Security Measures
 ------------------------------------------------------------
 - password_hash/password_verify
-- Prepared statements (no SQL injection)
+- Prepared statements (secure)
 - JWT authentication
-- HttpOnly + SameSite session cookies
-- Session fixation protection
+- HttpOnly + SameSite cookies
+- Strong session protection
 - No SELECT *
 - Input validation
 
 ------------------------------------------------------------
 13. Testing Steps
 ------------------------------------------------------------
-1. Import Postman collection
-2. Run JWT login
-3. Use token for Product API
-4. Run Admin login
-5. Test User CRUD
+1. Run Admin login
+2. Test User CRUD
+3. Run JWT login
+4. Use token for Product API
+5. Verify Product CRUD

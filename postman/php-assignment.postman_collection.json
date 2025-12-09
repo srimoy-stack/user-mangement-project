@@ -158,9 +158,9 @@
               "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/v1/auth/login",
+              "raw": "{{base_url}}/api/auth/login",
               "host": [ "{{base_url}}" ],
-              "path": [ "api", "v1", "auth", "login" ]
+              "path": [ "api", "auth", "login" ]
             }
           }
         }
@@ -180,9 +180,9 @@
               { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/api/v1/products?page=1&limit=10&q=&category=&sort=created_at&dir=desc",
+              "raw": "{{base_url}}/api/products?page=1&limit=10&q=&category=&sort=created_at&dir=desc",
               "host": [ "{{base_url}}" ],
-              "path": [ "api", "v1", "products" ],
+              "path": [ "api", "products" ],
               "query": [
                 { "key": "page", "value": "1" },
                 { "key": "limit", "value": "10" },
@@ -208,9 +208,9 @@
               "raw": "{\n  \"title\": \"iPhone 15\",\n  \"description\": \"Latest Apple iPhone\",\n  \"price\": 79999,\n  \"category\": \"electronics\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/v1/products",
+              "raw": "{{base_url}}/api/products",
               "host": [ "{{base_url}}" ],
-              "path": [ "api", "v1", "products" ]
+              "path": [ "api", "products" ]
             }
           }
         },
@@ -223,9 +223,9 @@
               { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/api/v1/products/1",
+              "raw": "{{base_url}}/api/products/1",
               "host": [ "{{base_url}}" ],
-              "path": [ "api", "v1", "products", "1" ]
+              "path": [ "api", "products", "1" ]
             }
           }
         },
@@ -243,9 +243,9 @@
               "raw": "{\n  \"title\": \"iPhone 15 Pro\",\n  \"description\": \"Upgraded Model\",\n  \"price\": 89999,\n  \"category\": \"electronics\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/v1/products/1",
+              "raw": "{{base_url}}/api/products/1",
               "host": [ "{{base_url}}" ],
-              "path": [ "api", "v1", "products", "1" ]
+              "path": [ "api", "products", "1" ]
             }
           }
         },
@@ -258,9 +258,9 @@
               { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
             ],
             "url": {
-              "raw": "{{base_url}}/api/v1/products/1",
+              "raw": "{{base_url}}/api/products/1",
               "host": [ "{{base_url}}" ],
-              "path": [ "api", "v1", "products", "1" ]
+              "path": [ "api", "products", "1" ]
             }
           }
         }
