@@ -1,0 +1,270 @@
+{
+  "info": {
+    "name": "PHP Assignment API Collection",
+    "_postman_id": "c7a77cd1-9987-4ee8-9c38-assign-php-api",
+    "description": "Complete Postman collection for Admin Panel + Product Catalog REST API.\nIncludes: Admin Login (session), JWT Login, User CRUD, Product CRUD,\nPagination, Sorting, Search, Category Filter.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ],
+  "item": [
+
+    {
+      "name": "ADMIN PANEL",
+      "item": [
+
+        {
+          "name": "Admin Login (Session)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/login",
+              "host": [ "{{base_url}}" ],
+              "path": [ "admin", "login" ]
+            }
+          }
+        },
+
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/users?page=1&limit=10&q=&sort=created_at&dir=desc",
+              "host": [ "{{base_url}}" ],
+              "path": [ "admin", "users" ],
+              "query": [
+                { "key": "page",  "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "q",     "value": "" },
+                { "key": "sort",  "value": "created_at" },
+                { "key": "dir",   "value": "desc" }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"9999999999\",\n  \"city\": \"Bangalore\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": [ "{{base_url}}" ],
+              "path": [ "admin", "users" ]
+            }
+          }
+        },
+
+        {
+          "name": "Show User by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/admin/users/1",
+              "host": [ "{{base_url}}" ],
+              "path": [ "admin", "users", "1" ]
+            }
+          }
+        },
+
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"johnupdated@example.com\",\n  \"phone\": \"8888888888\",\n  \"city\": \"Mumbai\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/1",
+              "host": [ "{{base_url}}" ],
+              "path": [ "admin", "users", "1" ]
+            }
+          }
+        },
+
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/admin/users/1",
+              "host": [ "{{base_url}}" ],
+              "path": [ "admin", "users", "1" ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "JWT AUTH API",
+      "item": [
+
+        {
+          "name": "API Login (JWT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res = pm.response.json();",
+                  "pm.collectionVariables.set('jwt_token', res.token);",
+                  "pm.test('Token Saved', function () { pm.expect(res.token).to.exist; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "v1", "auth", "login" ]
+            }
+          }
+        }
+
+      ]
+    },
+
+    {
+      "name": "PRODUCT API (JWT REQUIRED)",
+      "item": [
+
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products?page=1&limit=10&q=&category=&sort=created_at&dir=desc",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "v1", "products" ],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "q", "value": "" },
+                { "key": "category", "value": "" },
+                { "key": "sort", "value": "created_at" },
+                { "key": "dir", "value": "desc" }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"iPhone 15\",\n  \"description\": \"Latest Apple iPhone\",\n  \"price\": 79999,\n  \"category\": \"electronics\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "v1", "products" ]
+            }
+          }
+        },
+
+        {
+          "name": "Show Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "v1", "products", "1" ]
+            }
+          }
+        },
+
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"iPhone 15 Pro\",\n  \"description\": \"Upgraded Model\",\n  \"price\": 89999,\n  \"category\": \"electronics\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "v1", "products", "1" ]
+            }
+          }
+        },
+
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "v1", "products", "1" ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
